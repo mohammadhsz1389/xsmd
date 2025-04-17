@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پگردش - قدم‌شماری هوشمند</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #ff6b6b;
+            --text-color: #333;
+            --bg-color: #f5f7ff;
+            --card-color: #fff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary-color: #5d7eff;
+            --secondary-color: #ff7b7b;
+            --text-color: #f0f0f0;
+            --bg-color: #1a1a2e;
+            --card-color: #16213e;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .stats-card {
+            background-color: var(--card-color);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .steps-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .coins-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-color);
+            border-radius: 20px;
+            padding: 15px 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .coins-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .coins-icon {
+            font-size: 24px;
+            color: gold;
+            margin-left: 10px;
+        }
+
+        .coins-count {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .convert-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .convert-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .convert-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .league-section {
+            background-color: var(--card-color);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .league-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .league-progress {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .league-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .league-levels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .level {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .level-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--card-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            box-shadow: var(--shadow);
+            font-size: 18px;
+        }
+
+        .level.active .level-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .level-name {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .level.active .level-name {
+            color: var(--primary-color);
+        }
+
+        .level::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: -1;
+        }
+
+        .level:last-child::after {
+            display: none;
+        }
+
+        .challenge-section {
+            background-color: var(--card-color);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-top: 25px;
+        }
+
+        .challenge-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .challenge-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .challenge-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .challenge-desc {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .start-challenge {
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-challenge:hover {
+            transform: translateY(-2px);
+        }
+
+        .sensor-status {
+            background-color: var(--card-color);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .sensor-active {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .sensor-inactive {
+            color: #F44336;
+            font-weight: bold;
+        }
+
+        .start-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .start-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 14px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>پگردش</h1>
+            <button class="mode-toggle" id="modeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <div class="stats-card">
+            <div class="steps-display" id="stepsCount">0</div>
+            <div>قدم</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="caloriesCount">0</div>
+                    <div class="stat-label">کالری</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="distanceCount">0</div>
+                    <div class="stat-label">کیلومتر</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="coinsCount">0</div>
+                    <div class="stat-label">سکه</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="coins-section">
+            <div class="coins-info">
+                <span class="coins-count" id="totalCoins">0</span>
+                <i class="fas fa-coins coins-icon"></i>
+            </div>
+            <button class="convert-btn" id="convertBtn" disabled>تبدیل قدم به سکه</button>
+        </div>
+
+        <div class="league-section">
+            <div class="league-title">لیگ شما</div>
+            <div class="league-progress">
+                <div class="league-progress-bar" id="leagueProgress" style="width: 0%"></div>
+            </div>
+            <div class="league-levels">
+                <div class="level" id="level1">
+                    <div class="level-icon">N</div>
+                    <div class="level-name">NOB</div>
+                </div>
+                <div class="level" id="level2">
+                    <div class="level-icon">P</div>
+                    <div class="level-name">PRO</div>
+                </div>
+                <div class="level" id="level3">
+                    <div class="level-icon">M</div>
+                    <div class="level-name">Master</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="challenge-section">
+            <div class="challenge-title">چالش‌ها</div>
+            <div class="challenge-card">
+                <div class="challenge-name">راندوو</div>
+                <div class="challenge-desc">فعالیت بیشتر، گردشگری بهتر</div>
+                <button class="start-challenge">بزن بریم گردش</button>
+            </div>
+        </div>
+
+        <div class="sensor-status" id="sensorStatus">
+            وضعیت سنسور: <span class="sensor-inactive">غیرفعال</span>
+        </div>
+
+        <button class="start-btn" id="startBtn">شروع قدم‌شماری</button>
+    </div>
+
+    <div class="footer">
+        ساخته شده با ❤️ توسط محمد حسین
+    </div>
+
+    <script>
+        // Dark mode toggle
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+        
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                modeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                modeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        // App logic
+        let steps = 0;
+        let coins = 0;
+        let totalCoins = 0;
+        let isTracking = false;
+        let accelerometer = null;
+        let lastAcceleration = 0;
+        let stepThreshold = 15; // حساسیت تشخیص قدم
+        let stepCooldown = 0;
+        
+        const stepsCount = document.getElementById('stepsCount');
+        const caloriesCount = document.getElementById('caloriesCount');
+        const distanceCount = document.getElementById('distanceCount');
+        const coinsCount = document.getElementById('coinsCount');
+        const totalCoinsDisplay = document.getElementById('totalCoins');
+        const progressBar = document.getElementById('progressBar');
+        const leagueProgress = document.getElementById('leagueProgress');
+        const convertBtn = document.getElementById('convertBtn');
+        const sensorStatus = document.getElementById('sensorStatus');
+        const startBtn = document.getElementById('startBtn');
+        
+        // Convert steps to coins button
+        convertBtn.addEventListener('click', convertStepsToCoins);
+        
+        // Start/stop tracking button
+        startBtn.addEventListener('click', toggleTracking);
+        
+        function toggleTracking() {
+            if (isTracking) {
+                stopTracking();
+                startBtn.textContent = 'شروع قدم‌شماری';
+                sensorStatus.innerHTML = 'وضعیت سنسور: <span class="sensor-inactive">غیرفعال</span>';
+            } else {
+                startTracking();
+                startBtn.textContent = 'توقف قدم‌شماری';
+                sensorStatus.innerHTML = 'وضعیت سنسور: <span class="sensor-active">فعال</span>';
+            }
+        }
+        
+        function startTracking() {
+            if (window.Accelerometer) {
+                try {
+                    accelerometer = new Accelerometer({ frequency: 60 });
+                    
+                    accelerometer.addEventListener('reading', () => {
+                        // محاسبه شتاب کلی
+                        const acceleration = Math.sqrt(
+                            accelerometer.x ** 2 + 
+                            accelerometer.y ** 2 + 
+                            accelerometer.z ** 2
+                        );
+                        
+                        // تشخیص قدم
+                        detectStep(acceleration);
+                    });
+                    
+                    accelerometer.start();
+                    isTracking = true;
+                } catch (error) {
+                    alert('خطا در دسترسی به سنسور: ' + error.message);
+                    sensorStatus.innerHTML = 'وضعیت سنسور: <span class="sensor-inactive">خطا در دسترسی</span>';
+                }
+            } else {
+                alert('مرورگر شما از سنسور شتاب‌سنج پشتیبانی نمی‌کند. لطفاً از مرورگر دیگری استفاده کنید.');
+                sensorStatus.innerHTML = 'وضعیت سنسور: <span class="sensor-inactive">پشتیبانی نمی‌شود</span>';
+            }
+        }
+        
+        function stopTracking() {
+            if (accelerometer) {
+                accelerometer.stop();
+            }
+            isTracking = false;
+        }
+        
+        function detectStep(currentAcceleration) {
+            // کاهش زمان کوئلدون
+            if (stepCooldown > 0) {
+                stepCooldown--;
+                return;
+            }
+            
+            // محاسبه تغییرات شتاب
+            const delta = Math.abs(currentAcceleration - lastAcceleration);
+            
+            // اگر تغییرات از حد آستانه بیشتر بود، قدم محسوب می‌شود
+            if (delta > stepThreshold) {
+                addStep();
+                stepCooldown = 20; // زمان تأخیر بین تشخیص قدم‌ها
+            }
+            
+            lastAcceleration = currentAcceleration;
+        }
+        
+        function addStep() {
+            steps++;
+            coins++; // Each step = 1 coin
+            updateDisplay();
+            
+            // Enable convert button if there are steps to convert
+            if (steps > 0) {
+                convertBtn.disabled = false;
+            }
+        }
+        
+        function convertStepsToCoins() {
+            totalCoins += coins;
+            steps = 0;
+            coins = 0;
+            updateDisplay();
+            convertBtn.disabled = true;
+            
+            // Show a message that coins have been added
+            alert(`سکه های شما با موفقیت اضافه شدند! مجموع سکه ها: ${totalCoins}`);
+        }
+        
+        function updateDisplay() {
+            // Update step count
+            stepsCount.textContent = steps.toLocaleString();
+            
+            // Calculate calories (approx 0.04 calories per step)
+            const calories = Math.round(steps * 0.04);
+            caloriesCount.textContent = calories.toLocaleString();
+            
+            // Calculate distance (approx 0.000762 km per step)
+            const distance = (steps * 0.000762).toFixed(2);
+            distanceCount.textContent = distance;
+            
+            // Update coins
+            coinsCount.textContent = coins.toLocaleString();
+            totalCoinsDisplay.textContent = totalCoins.toLocaleString();
+            
+            // Update progress bar (max 5000 steps for demo)
+            const progressPercent = Math.min((steps / 5000) * 100, 100);
+            progressBar.style.width = `${progressPercent}%`;
+            
+            // Update league progress and levels
+            updateLeagueProgress();
+        }
+        
+        function updateLeagueProgress() {
+            // Determine current league
+            let leaguePercent = 0;
+            let currentLevel = 1;
+            
+            if (steps < 10000) {
+                leaguePercent = (steps / 10000) * 100;
+                currentLevel = 1;
+            } else if (steps < 20000) {
+                leaguePercent = ((steps - 10000) / 10000) * 100;
+                currentLevel = 2;
+            } else {
+                leaguePercent = ((steps - 20000) / 30000) * 100;
+                currentLevel = 3;
+            }
+            
+            leagueProgress.style.width = `${leaguePercent}%`;
+            
+            // Update active levels
+            document.getElementById('level1').classList.toggle('active', currentLevel >= 1);
+            document.getElementById('level2').classList.toggle('active', currentLevel >= 2);
+            document.getElementById('level3').classList.toggle('active', currentLevel >= 3);
+        }
+        
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
